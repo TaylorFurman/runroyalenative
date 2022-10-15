@@ -1,10 +1,10 @@
 import React from 'react';
-import { HelloWorld } from './src/RunningRoyale';
+import { RunningRoyale } from './src/RunningRoyale';
 
 const App = () => {
 
   return (
-    <HelloWorld/>
+    <RunningRoyale/>
   );
 };
 
