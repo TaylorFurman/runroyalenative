@@ -1,10 +1,14 @@
 import React from 'react';
 import { RunningRoyale } from './src/RunningRoyale';
 
+import { NavigationContainer } from '@react-navigation/native';
+
 const App = () => {
 
   return (
-    <RunningRoyale/>
+    <NavigationContainer>
+      <RunningRoyale/>
+    </NavigationContainer>
   );
 };
 
