@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export function StartRunButton(params) {
-  const [count, setCount] = useState(0);
-  const message = 'Start Run';
-  const addOne = () => {
-    setCount(count + 1);
-  };
+export function StartRunButton(props) {
+  const { navigation } = props;
+  const message = "Start Run";
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.touchArea} onPress={addOne}>
-        <Text>{message + count}</Text>
+      <TouchableOpacity
+        style={styles.touchArea}
+        onPress={() => navigation.navigate("Details")}
+      >
+        <Text>{message}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -18,13 +18,13 @@ export function StartRunButton(params) {
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   touchArea: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
     padding: 20,
   },
 });
