@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "RunRoyaleNative",
-    "slug": "RunRoyaleNative",
+    "slug": "runroyale",
+    "owner": "tfurman1457",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "33db0c63-a561-4b31-a7ab-2b7339e41d3b"
+      }
     }
   }
 }

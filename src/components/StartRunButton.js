@@ -8,7 +8,7 @@ export function StartRunButton(props) {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.touchArea}
-        onPress={() => navigation.navigate("Details")}
+        onPress={() => navigation.navigate("RunRoyale")}
       >
         <Text>{message}</Text>
       </TouchableOpacity>
