@@ -1,7 +1,7 @@
-import React from 'react';
-import {View, Text, LogBox, StyleSheet, TouchableOpacity} from 'react-native';
-import {WelcomeMessage} from '../components/WelcomeMessage';
-import {StartRunButton} from '../components/StartRunButton';
+import React from "react";
+import { View, Text, LogBox, StyleSheet, TouchableOpacity } from "react-native";
+import { WelcomeMessage } from "../components/WelcomeMessage";
+import { StartRunButton } from "../components/StartRunButton";
 
 export function RunRoyale(props) {
   const { navigation } = props;
@@ -19,11 +19,11 @@ export function RunRoyale(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'powderblue',
+    backgroundColor: "powderblue",
     flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   touchArea: {
     alignItems: "center",
