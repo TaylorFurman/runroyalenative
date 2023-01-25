@@ -10,6 +10,7 @@ export function Geolocation() {
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [distanceChange, setDistanceChange] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -24,7 +25,7 @@ export function Geolocation() {
       setLongitude(location.coords.longitude);
       setLatitude(location.coords.latitude);
       const distance = findChangeInDistance(location.coords.latitude, location.coords.longitude);
-      console.log(distance)
+      setDistanceChange(distance)
     })();
   }, [latitude, longitude]);
 
@@ -65,6 +66,7 @@ export function Geolocation() {
       </View>
       <Text>Longitude: {longitude}</Text>
       <Text>Latitude: {latitude}</Text>
+      <Text>Distance(m): {distanceChange}</Text>
     </>
   );
 }

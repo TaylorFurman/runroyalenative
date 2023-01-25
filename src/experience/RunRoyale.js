@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, LogBox, StyleSheet, TouchableOpacity } from "react-native";
-import { WelcomeMessage } from "../components/WelcomeMessage";
-import { StartRunButton } from "../components/StartRunButton";
+import { Geolocation } from "../components/Geolocation";
+import { Timer } from "../components/Timer"
 
 export function RunRoyale(props) {
   const { navigation } = props;
@@ -11,7 +11,10 @@ export function RunRoyale(props) {
         style={styles.touchArea}
         onPress={() => navigation.navigate("Home")}
       >
-        <Text>Go Back Home</Text>
+      <View style={styles.geolocation}>
+        <Geolocation />
+        <Timer />
+      </View>
       </TouchableOpacity>
     </View>
   );
@@ -30,4 +33,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#DDDDDD",
     padding: 20,
   },
+  geolocation:{
+    width: 300,
+    height: 200,
+  }
 });
