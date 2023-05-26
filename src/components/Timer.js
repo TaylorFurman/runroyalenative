@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Text } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Text } from "react-native";
 
-export const Timer= ()=>{
-    //const [totalRunTime, setTotalRunTime ] = useState(0);
-    const [seconds, setSeconds] = useState(0);
-    const [minutes, setMinutes] = useState(0);
-    const [hours, setHours] = useState(0);
+export const Timer = () => {
+  const [time, setTime] = useState(0);
 
-    useEffect(()=>{
-        setTimeout(() =>{
-            setSeconds(seconds + 1)
-        }, 1000)
-        if(seconds >= 9){
-            setSeconds(0);
-            setMinutes(minutes + 1)
-        }
-        if(minutes >=59){
-            setMinutes(0);
-            setHours(hours + 1)
-        }
-    })
+  useEffect(() => {
+    let intervalId = setTimeout(() => setTime(time + 1), 1000);
+    return () => clearTimeout(intervalId);
+  }, [time]);
 
-    return(
-        <>
-            <Text>Hours: {hours}</Text>
-            <Text>Minutes: {minutes}</Text>
-            <Text>Seconds: {seconds}</Text>
-        </>
-    )
-}
+  // Hours calculation
+  const hours = Math.floor(time / 3600);
+
+  // Minutes calculation
+  const minutes = Math.floor((time % 3600) / 60);
+
+  // Seconds calculation
+  const seconds = Math.floor((time % 6000) % 60);
+
+  return (
+    <>
+      <Text>Hours: {hours}</Text>
+      <Text>Minutes: {minutes}</Text>
+      <Text>Seconds: {seconds}</Text>
+    </>
+  );
+};
