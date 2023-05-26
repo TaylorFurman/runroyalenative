@@ -6,6 +6,7 @@ export function NavigationBar() {
 
   return (
     <View style={styles.container}>
+      <Text></Text>
       <Text style={styles.message}>{message}</Text>
     </View>
   );

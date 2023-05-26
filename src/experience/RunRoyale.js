@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   View,
   Text,
   LogBox,
@@ -13,7 +14,10 @@ import { Timer } from "../components/Timer";
 export function RunRoyale(props) {
   const { navigation } = props;
   // Placeholder to see layout
-  const numOfRunners = 15;
+  const numOfRunners = 1;
+  function stopRun() {
+    navigation.navigate("Home");
+  }
   return (
     <>
       <View>
@@ -22,15 +26,19 @@ export function RunRoyale(props) {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           {[...Array(numOfRunners)].map((e, i) => (
-            <TouchableOpacity
-              style={styles.touchArea}
-              onPress={() => navigation.navigate("Home")}
-            >
-              <View style={styles.geolocation}>
-                <Geolocation />
-                <Timer />
-              </View>
-            </TouchableOpacity>
+            <View key={i} style={styles.geolocation}>
+              <Geolocation />
+              <Timer />
+              <TouchableOpacity
+                style={styles.touchArea}
+                onLongPress={() => {
+                  stopRun();
+                }}
+                delayLongPress={1500}
+              >
+                <Text>Stop Run</Text>
+              </TouchableOpacity>
+            </View>
           ))}
         </View>
       </ScrollView>

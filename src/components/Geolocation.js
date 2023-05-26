@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import { Platform, Text, View, StyleSheet, Dimensions } from "react-native";
 
 import * as Location from "expo-location";
@@ -11,6 +11,14 @@ export function Geolocation() {
   const [latitude, setLatitude] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
   const [distanceChange, setDistanceChange] = useState(0);
+  const [coordinates, setCoordinates] = useState([]);
+
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    let intervalId = setTimeout(() => setTime(time + 1), 1000);
+    return () => clearTimeout(intervalId);
+  }, [time]);
 
   useEffect(() => {
     (async () => {
@@ -21,13 +29,21 @@ export function Geolocation() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
+
       setLocation(location);
       setLongitude(location.coords.longitude);
       setLatitude(location.coords.latitude);
-      const distance = findChangeInDistance(location.coords.latitude, location.coords.longitude);
-      setDistanceChange(distance)
+      setCoordinates((oldArray) => [
+        ...oldArray,
+        { latitude: location.coords.latitude, longitude: location.coords.longitude },
+      ]);
+      const distance = findChangeInDistance(
+        location.coords.latitude,
+        location.coords.longitude
+      );
+      setDistanceChange(Math.floor(distanceChange + distance));
     })();
-  }, [latitude, longitude]);
+  }, [time]);
 
   let text = "Waiting..";
   if (errorMsg) {
@@ -35,6 +51,7 @@ export function Geolocation() {
   } else if (location) {
     text = JSON.stringify(location);
   }
+
   return (
     <>
       <View style={styles.container}>
@@ -61,6 +78,19 @@ export function Geolocation() {
               longitudeDelta: 0.00121,
             }}
             title="Marker"
+          />
+          <Polyline
+            coordinates={coordinates}
+            strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+            strokeColors={[
+              "#7F0000",
+              "#00000000", // no color, creates a "long" gradient between the previous and next coordinate
+              "#B24112",
+              "#E5845C",
+              "#238C23",
+              "#7F0000",
+            ]}
+            strokeWidth={6}
           />
         </MapView>
       </View>
