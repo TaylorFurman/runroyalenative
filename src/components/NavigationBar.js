@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-export function NavigationBar(params) {
+export function NavigationBar() {
   const message = 'Welcome to Run Royale!';
 
   return (

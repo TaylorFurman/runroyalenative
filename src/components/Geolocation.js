@@ -64,8 +64,6 @@ export function Geolocation() {
           />
         </MapView>
       </View>
-      <Text>Longitude: {longitude}</Text>
-      <Text>Latitude: {latitude}</Text>
       <Text>Distance(m): {distanceChange}</Text>
     </>
   );
