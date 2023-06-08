@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, Button } from 'react-native';
-import { Homepage } from './src/experience/Homepage'
-import { RunRoyale } from './src/experience/RunRoyale'
+import { Homepage } from './src/screens/Homepage'
+import { RunRoyale } from './src/screens/RunRoyale'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 

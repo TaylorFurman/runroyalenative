@@ -1,9 +1,7 @@
 import React from "react";
 import {
-  Button,
   View,
   Text,
-  LogBox,
   ScrollView,
   StyleSheet,
   TouchableOpacity,

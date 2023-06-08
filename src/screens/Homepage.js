@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, LogBox, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { WelcomeMessage } from "../components/WelcomeMessage";
 import { StartRunButton } from "../components/StartRunButton";
 
