@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import { Platform, Text, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
-import { Timer } from "./Timer";
+import React, { useState, useEffect } from 'react';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import {
+  Platform,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import { Timer } from './Timer';
 
-import * as Location from "expo-location";
-import { findChangeInDistance } from "./utils/findChangeInDistance";
+import * as Location from 'expo-location';
+import { findChangeInDistance } from '../utils/findChangeInDistance';
 
-export function Geolocation({navigation}) {
+export function Geolocation({ navigation }) {
   const [location, setLocation] = useState(null);
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
@@ -20,22 +28,25 @@ export function Geolocation({navigation}) {
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
         return;
       }
 
       const location = await Location.getCurrentPositionAsync({});
 
       setLocation(location);
-      if(!startDate){
+      if (!startDate) {
         setStartDate(Date.now());
       }
       setLongitude(location.coords.longitude);
       setLatitude(location.coords.latitude);
       setCoordinates((oldArray) => [
         ...oldArray,
-        { latitude: location.coords.latitude, longitude: location.coords.longitude },
+        {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
       ]);
       const distance = findChangeInDistance(
         location.coords.latitude,
@@ -46,83 +57,83 @@ export function Geolocation({navigation}) {
   }, [time]);
 
   function stopRun() {
-    
-    navigation.navigate("SummaryOfRun", {
+    navigation.navigate('Summary', {
       distanceChange,
       startDate,
-      coordinates
+      coordinates,
     });
   }
 
-  let text = "Waiting..";
+  let text = 'Waiting..';
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
   }
 
+  if (!location) {
+    return (
+      <View style={[styles.loading]}>
+        <Text>Loading</Text>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
     <>
       <View style={styles.container}>
-        {location ? (
-          <>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              region={{
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: 0.00122,
-                longitudeDelta: 0.00121,
-              }}
-            >
-              <Marker
-                coordinate={{
-                  latitude: latitude,
-                  longitude: longitude,
-                  latitudeDelta: 0.00122,
-                  longitudeDelta: 0.00121,
-                }}
-                title='Marker'
-              />
-              <Polyline
-                coordinates={coordinates}
-                strokeColor='#000' // fallback for when `strokeColors` is not supported by the map-provider
-                strokeColors={[
-                  '#7F0000',
-                  '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
-                  '#B24112',
-                  '#E5845C',
-                  '#238C23',
-                  '#7F0000',
-                ]}
-                strokeWidth={6}
-              />
-            </MapView>
-            <Text>Distance(m): {distanceChange}</Text>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          region={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.00122,
+            longitudeDelta: 0.00121,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: latitude,
+              longitude: longitude,
+              latitudeDelta: 0.00122,
+              longitudeDelta: 0.00121,
+            }}
+            title='Marker'
+          />
+          <Polyline
+            coordinates={coordinates}
+            strokeColor='#000' // fallback for when `strokeColors` is not supported by the map-provider
+            strokeColors={[
+              '#7F0000',
+              '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+              '#B24112',
+              '#E5845C',
+              '#238C23',
+              '#7F0000',
+            ]}
+            strokeWidth={6}
+          />
+        </MapView>
+        <Text>Distance(m): {distanceChange}</Text>
 
-            <Timer time={time} setTime={setTime} location={location} />
-            <TouchableOpacity
-              style={styles.touchArea}
-              onLongPress={() => {
-                stopRun();
-              }}
-              delayLongPress={750}
-            >
-              <Text>Stop Run</Text>
-            </TouchableOpacity>
-            <Text>{`startDate ${startDate}`}</Text>
-          </>
-        ):
-        <>
-        <Text>Loading...</Text>
-        </>
-        }
+        <Timer time={time} setTime={setTime} location={location} />
+        <TouchableOpacity
+          style={styles.touchArea}
+          onLongPress={() => {
+            stopRun();
+          }}
+          delayLongPress={750}
+        >
+          <Text>Stop Run</Text>
+        </TouchableOpacity>
+        <Text>{`startDate ${startDate}`}</Text>
       </View>
     </>
   );
@@ -131,19 +142,25 @@ export function Geolocation({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   map: {
-    width: Dimensions.get("window").width,
+    width: Dimensions.get('window').width,
 
-    alignSelf: "stretch",
-    height: "100%",
+    alignSelf: 'stretch',
+    height: '100%',
   },
   touchArea: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
     padding: 20,
+  },
+  loading: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

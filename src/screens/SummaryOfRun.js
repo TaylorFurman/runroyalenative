@@ -1,49 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-
-function parseTimeFromSeconds(time = 0) {
-  let totalHours = 0;
-  let totalMinutes = 0;
-  let totalSeconds = 0;
-
-  // Hours calculation
-  const hours = Math.floor(time / 3600);
-
-  // Minutes calculation
-  const minutes = Math.floor((time % 3600) / 60);
-
-  // Seconds calculation
-  const seconds = Math.floor((time % 6000) % 60);
-
-  if (hours > 0) {
-    totalHours = hours;
-  }
-  if (minutes > 0) {
-    totalMinutes = minutes;
-  }
-  if (seconds > 0) {
-    totalSeconds = seconds;
-  }
-  console.log({ totalHours, totalMinutes, totalSeconds });
-
-  return { totalHours, totalMinutes, totalSeconds };
-}
+import { parseTimeFromSeconds } from '../utils/parseTimeFromSeconds';
 
 export function SummaryOfRun(props) {
-  const { route } = props;
+  const { route, navigation } = props;
   // Placeholder to see layout
   const { coordinates, distanceChange, startDate } = route.params;
 
-  const millis = Date.now() - startDate;
-  const seconds = Math.floor(millis / 1000);
+  const seconds = Math.floor((Date.now() - startDate) / 1000);
 
   const { totalHours, totalMinutes, totalSeconds } = parseTimeFromSeconds(seconds);
 
+  function saveActivity() {
+    // Make API call to save activity
+    navigation.navigate('Home');
+  }
+
   return (
     <>
-      <View>
-        <Text>{`Distance Ran: ${distanceChange}`}</Text>
+      <View style={styles.container}>
+        <Text>{`Distance Ran: ${distanceChange}m`}</Text>
         <Text>{`Total Time Ran Hours: ${totalHours} Minutes: ${totalMinutes} Seconds: ${totalSeconds}`}</Text>
         <MapView
           style={styles.map}
@@ -61,13 +38,26 @@ export function SummaryOfRun(props) {
           }}
         >
           <Marker
+            key={'start'}
             coordinate={{
               latitude: coordinates[0]?.latitude,
               longitude: coordinates[0]?.longitude,
               latitudeDelta: 0.00122,
               longitudeDelta: 0.00121,
             }}
-            title='Marker'
+            title='Start'
+            pinColor={'green'}
+          />
+          <Marker
+            key={'end'}
+            coordinate={{
+              latitude: coordinates[coordinates.length - 1]?.latitude,
+              longitude: coordinates[coordinates.length - 1]?.longitude,
+              latitudeDelta: 0.00122,
+              longitudeDelta: 0.00121,
+            }}
+            title='End'
+            pinColor={'red'}
           />
           <Polyline
             coordinates={coordinates}
@@ -83,6 +73,17 @@ export function SummaryOfRun(props) {
             strokeWidth={6}
           />
         </MapView>
+      </View>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.touchArea}
+          onLongPress={() => {
+            saveActivity();
+          }}
+          delayLongPress={750}
+        >
+          <Text>Save Activity</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -103,6 +104,6 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     alignSelf: 'stretch',
-    height: '100%',
+    height: '100%'
   },
 });
