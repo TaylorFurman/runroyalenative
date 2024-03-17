@@ -133,7 +133,6 @@ export function Geolocation({ navigation }) {
         >
           <Text>Stop Run</Text>
         </TouchableOpacity>
-        <Text>{`startDate ${startDate}`}</Text>
       </View>
     </>
   );

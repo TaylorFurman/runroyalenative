@@ -24,7 +24,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Homepage} options={{ title: 'Welcome to Run Royale!' }} />
+        <Stack.Screen name="Home" component={Homepage} options={{ title: 'Welcome to Run Royale!', headerBackTitle: 'Back' }} />
         <Stack.Screen name="RunRoyale" component={RunRoyale} />
         <Stack.Screen name="Summary" component={SummaryOfRun} />
       </Stack.Navigator>

@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { WelcomeMessage } from "../components/WelcomeMessage";
 import { StartRunButton } from "../components/StartRunButton";
 
 
 export function Homepage({ navigation }) {
-  // API request to get runnerInfo
+const [userData, setUserData] = useState(null);
+
+  useEffect(()=>{
+      // API request to get runnerInfo
+      fetch('https://swapi.dev/api/people/1/', {
+        method: "GET"
+      })
+      .then(response => response.json())
+      .then(data => setUserData(data));
+  }, [])
+
+  console.log(userData);
   return (
     <View style={styles.container}>
       <WelcomeMessage />
