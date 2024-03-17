@@ -32,7 +32,7 @@ export function RunRoyale(props) {
                 onLongPress={() => {
                   stopRun();
                 }}
-                delayLongPress={1500}
+                delayLongPress={750}
               >
                 <Text>Stop Run</Text>
               </TouchableOpacity>
