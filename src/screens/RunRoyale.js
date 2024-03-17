@@ -4,18 +4,15 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
+
 } from "react-native";
 import { Geolocation } from "../components/Geolocation";
-import { Timer } from "../components/Timer";
+
 
 export function RunRoyale(props) {
   const { navigation } = props;
   // Placeholder to see layout
   const numOfRunners = 1;
-  function stopRun() {
-    navigation.navigate("Home");
-  }
   return (
     <>
       <View>
@@ -25,17 +22,7 @@ export function RunRoyale(props) {
         <View style={styles.container}>
           {[...Array(numOfRunners)].map((e, i) => (
             <View key={i} style={styles.geolocation}>
-              <Geolocation />
-              <Timer />
-              <TouchableOpacity
-                style={styles.touchArea}
-                onLongPress={() => {
-                  stopRun();
-                }}
-                delayLongPress={750}
-              >
-                <Text>Stop Run</Text>
-              </TouchableOpacity>
+              <Geolocation navigation={navigation}/>
             </View>
           ))}
         </View>
@@ -52,16 +39,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  touchArea: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 20,
-  },
   geolocation: {
     width: 300,
     height: 200,
   },
-  // scrollView: {
-  //   marginHorizontal: 20,
-  // },
 });

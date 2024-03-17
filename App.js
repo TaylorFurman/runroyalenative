@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, Text, Button } from 'react-native';
-import { Homepage } from './src/screens/Homepage'
-import { RunRoyale } from './src/screens/RunRoyale'
+import { Homepage, RunRoyale, SummaryOfRun } from './src/screens/index';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -27,6 +26,7 @@ function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Homepage} options={{ title: 'Welcome to Run Royale!' }} />
         <Stack.Screen name="RunRoyale" component={RunRoyale} />
+        <Stack.Screen name="SummaryOfRun" component={SummaryOfRun} />
       </Stack.Navigator>
     </NavigationContainer>
   );

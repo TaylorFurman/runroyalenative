@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
-import { Platform, Text, View, StyleSheet, Dimensions } from "react-native";
+import { Platform, Text, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
+import { Timer } from "./Timer";
 
 import * as Location from "expo-location";
 import { findChangeInDistance } from "./utils/findChangeInDistance";
 
-export function Geolocation() {
+export function Geolocation({navigation}) {
   const [location, setLocation] = useState(null);
   const [longitude, setLongitude] = useState(0);
   const [latitude, setLatitude] = useState(0);
@@ -14,23 +15,22 @@ export function Geolocation() {
   const [coordinates, setCoordinates] = useState([]);
 
   const [time, setTime] = useState(0);
-
-  useEffect(() => {
-    let intervalId = setTimeout(() => setTime(time + 1), 1000);
-    return () => clearTimeout(intervalId);
-  }, [time]);
+  const [startDate, setStartDate] = useState(0);
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync({});
 
       setLocation(location);
+      if(!startDate){
+        setStartDate(Date.now());
+      }
       setLongitude(location.coords.longitude);
       setLatitude(location.coords.latitude);
       setCoordinates((oldArray) => [
@@ -45,6 +45,15 @@ export function Geolocation() {
     })();
   }, [time]);
 
+  function stopRun() {
+    
+    navigation.navigate("SummaryOfRun", {
+      distanceChange,
+      startDate,
+      coordinates
+    });
+  }
+
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
@@ -55,46 +64,66 @@ export function Geolocation() {
   return (
     <>
       <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          region={{
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: 0.00122,
-            longitudeDelta: 0.00121,
-          }}
-        >
-          <Marker
-            coordinate={{
-              latitude: latitude,
-              longitude: longitude,
-              latitudeDelta: 0.00122,
-              longitudeDelta: 0.00121,
-            }}
-            title="Marker"
-          />
-          <Polyline
-            coordinates={coordinates}
-            strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-            strokeColors={[
-              "#7F0000",
-              "#00000000", // no color, creates a "long" gradient between the previous and next coordinate
-              "#B24112",
-              "#E5845C",
-              "#238C23",
-              "#7F0000",
-            ]}
-            strokeWidth={6}
-          />
-        </MapView>
+        {location ? (
+          <>
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              region={{
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0.00122,
+                longitudeDelta: 0.00121,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: latitude,
+                  longitude: longitude,
+                  latitudeDelta: 0.00122,
+                  longitudeDelta: 0.00121,
+                }}
+                title='Marker'
+              />
+              <Polyline
+                coordinates={coordinates}
+                strokeColor='#000' // fallback for when `strokeColors` is not supported by the map-provider
+                strokeColors={[
+                  '#7F0000',
+                  '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+                  '#B24112',
+                  '#E5845C',
+                  '#238C23',
+                  '#7F0000',
+                ]}
+                strokeWidth={6}
+              />
+            </MapView>
+            <Text>Distance(m): {distanceChange}</Text>
+
+            <Timer time={time} setTime={setTime} location={location} />
+            <TouchableOpacity
+              style={styles.touchArea}
+              onLongPress={() => {
+                stopRun();
+              }}
+              delayLongPress={750}
+            >
+              <Text>Stop Run</Text>
+            </TouchableOpacity>
+            <Text>{`startDate ${startDate}`}</Text>
+          </>
+        ):
+        <>
+        <Text>Loading...</Text>
+        </>
+        }
       </View>
-      <Text>Distance(m): {distanceChange}</Text>
     </>
   );
 }
@@ -111,5 +140,10 @@ const styles = StyleSheet.create({
 
     alignSelf: "stretch",
     height: "100%",
+  },
+  touchArea: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 20,
   },
 });

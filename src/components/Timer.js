@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 
-export const Timer = () => {
-  const [time, setTime] = useState(0);
+export const Timer = ({time, setTime, location}) => {
 
   useEffect(() => {
-    let intervalId = setTimeout(() => setTime(time + 1), 1000);
-    return () => clearTimeout(intervalId);
-  }, [time]);
+    if(location){
+      let intervalId = setTimeout(() => setTime(time + 1), 1000);
+      return () => clearTimeout(intervalId);
+    }
+  }, [time, location]);
 
   // Hours calculation
   const hours = Math.floor(time / 3600);

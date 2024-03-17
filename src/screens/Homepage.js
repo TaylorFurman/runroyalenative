@@ -5,6 +5,7 @@ import { StartRunButton } from "../components/StartRunButton";
 
 
 export function Homepage({ navigation }) {
+  // API request to get runnerInfo
   return (
     <View style={styles.container}>
       <WelcomeMessage />
