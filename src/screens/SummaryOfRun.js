@@ -12,9 +12,23 @@ export function SummaryOfRun(props) {
 
   const { totalHours, totalMinutes, totalSeconds } = parseTimeFromSeconds(seconds);
 
-  function saveActivity() {
+  async function saveActivity({totalHours, totalMinutes, totalSeconds}) {
+    console.log("hello")
     // Make API call to save activity
-    navigation.navigate('Home');
+    const response = await fetch('http://localhost:8000/users', {
+        method: "POST",
+        body: {
+            totalHours, 
+            totalMinutes, 
+            totalSeconds
+        }
+      })
+      .then(response => {
+        console.log(response)
+        response.json()
+    })
+      .then(data => setUserData(data));
+    //navigation.navigate('Home');
   }
 
   return (
@@ -78,7 +92,7 @@ export function SummaryOfRun(props) {
         <TouchableOpacity
           style={styles.touchArea}
           onLongPress={() => {
-            saveActivity();
+            saveActivity({totalHours, totalMinutes, totalSeconds});
           }}
           delayLongPress={750}
         >
